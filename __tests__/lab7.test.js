@@ -127,13 +127,13 @@ describe('Basic user flow for Website', () => {
     const textHandle = await countHandle.getProperty('innerText');
     const countText = await textHandle.jsonValue();
 
-    // Expect innerText to be "Remove from Cart"
+    // Expect countText to be "20"
     expect(countText).toBe("20");
 
   }, 20000);
 
   // Check to make sure that after you reload the page it remembers all of the items in your cart
-  it.skip('Checking number of items in cart on screen after reload', async () => {
+  it('Checking number of items in cart on screen after reload', async () => {
     console.log('Checking number of items in cart on screen after reload...');
 
     /**
@@ -144,7 +144,37 @@ describe('Basic user flow for Website', () => {
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
 
-  }, 10000);
+    // Reload the page
+    await page.reload();
+
+    // Select all of the <product-item> elements
+    const prodItems = await page.$$('product-item');
+
+    // Check every element to make sure that all of their buttons say "Remove from Cart"
+    for (let i = 0; i < prodItems.length; i++) {
+      // grab shadowRoot
+      const prodShadow = await prodItems[i].getProperty('shadowRoot');
+
+      // query button from shadowRoot
+      const button = await prodShadow.$('button');
+
+      // check button innerText
+      const textHandle = await button.getProperty('innerText');
+      const buttonText = await textHandle.jsonValue();
+
+      // Expect innerText to be "Remove from Cart"
+      expect(buttonText).toBe("Remove from Cart");
+    }
+
+    // Check to see if the innerText of #cart-count is 20
+    const countHandle = await page.$('#cart-count');
+    const textHandle = await countHandle.getProperty('innerText');
+    const countText = await textHandle.jsonValue();
+
+    // Expect countText to be "20"
+    expect(countText).toBe("20");
+
+  }, 20000);
 
   // Check to make sure that the cart in localStorage is what you expect
   it.skip('Checking the localStorage to make sure cart is correct', async () => {
