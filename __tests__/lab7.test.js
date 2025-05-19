@@ -277,7 +277,7 @@ describe('Basic user flow for Website', () => {
 
   // Checking to make sure that localStorage for the cart is as we'd expect for the
   // cart being empty
-  it.skip('Checking the localStorage to make sure cart is correct', async () => {
+  it('Checking the localStorage to make sure cart is correct', async () => {
     console.log('Checking the localStorage...');
 
     /**
@@ -286,5 +286,12 @@ describe('Basic user flow for Website', () => {
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
 
+      const expected = '[]';
+    
+      const actual = await page.evaluate(() => {
+          return window.localStorage.getItem('cart'); 
+      });
+      
+      expect(actual).toBe(expected);
   });
 });
