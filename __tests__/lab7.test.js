@@ -101,7 +101,7 @@ describe('Basic user flow for Website', () => {
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
 
-    // TODO: Query select all of the <product-item> elements
+    // Query select all of the <product-item> elements
     const prodItems = await page.$$('product-item');
 
     for (let i = 0; i < prodItems.length; i++) {
@@ -196,7 +196,7 @@ describe('Basic user flow for Website', () => {
 
   // Checking to make sure that if you remove all of the items from the cart that the cart
   // number in the top right of the screen is 0
-  it.skip('Checking number of items in cart on screen after removing from cart', async () => {
+  it('Checking number of items in cart on screen after removing from cart', async () => {
     console.log('Checking number of items in cart on screen...');
 
     /**
@@ -206,7 +206,29 @@ describe('Basic user flow for Website', () => {
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
 
-  }, 10000);
+    // Query select all of the <product-item> elements
+    const prodItems = await page.$$('product-item');
+
+    for (let i = 0; i < prodItems.length; i++) {
+      // get shadowRoot
+      const prodShadow = await prodItems[i].getProperty('shadowRoot');
+
+      // select button
+      const button = await prodShadow.$('button');
+
+      // click button
+      await button.click();
+    }
+
+    // Check to see if the innerText of #cart-count is 0
+    const countHandle = await page.$('#cart-count');
+    const textHandle = await countHandle.getProperty('innerText');
+    const countText = await textHandle.jsonValue();
+
+    // Expect countText to be "0"
+    expect(countText).toBe("0");
+
+  }, 20000);
 
   // Checking to make sure that it remembers us removing everything from the cart
   // after we refresh the page
