@@ -90,7 +90,7 @@ describe('Basic user flow for Website', () => {
 
   // Check to make sure that after clicking "Add to Cart" on every <product-item> that the Cart
   // number in the top right has been correctly updated
-  it.skip('Checking number of items in cart on screen', async () => {
+  it('Checking number of items in cart on screen', async () => {
     console.log('Checking number of items in cart on screen...');
 
     /**
@@ -101,7 +101,36 @@ describe('Basic user flow for Website', () => {
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
 
-  }, 10000);
+    // TODO: Query select all of the <product-item> elements
+    const prodItems = await page.$$('product-item');
+
+    for (let i = 0; i < prodItems.length; i++) {
+      // get shadowRoot
+      const prodShadow = await prodItems[i].getProperty('shadowRoot');
+
+      // select button
+      const button = await prodShadow.$('button');
+
+      // get button text
+      const textHandle = await button.getProperty('innerText');
+      const buttonText = await textHandle.jsonValue();
+
+      // if button says "Add to Cart"
+      if (buttonText == "Add to Cart") {
+        // click button
+        await button.click();
+      }
+    }
+
+    // Check to see if the innerText of #cart-count is 20
+    const countHandle = await page.$('#cart-count');
+    const textHandle = await countHandle.getProperty('innerText');
+    const countText = await textHandle.jsonValue();
+
+    // Expect innerText to be "Remove from Cart"
+    expect(countText).toBe("20");
+
+  }, 20000);
 
   // Check to make sure that after you reload the page it remembers all of the items in your cart
   it.skip('Checking number of items in cart on screen after reload', async () => {
