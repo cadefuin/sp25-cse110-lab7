@@ -1,5 +1,7 @@
 # Lab 7
 
+Name: Cass Adefuin
+
 ## Check Your Understanding
 
 1. I would run automated tests within a Github action to ensure that every change passes all the tests without going through the manual effort of running tests.
